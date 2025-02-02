@@ -9,7 +9,12 @@
     <link rel="stylesheet" href="{% static "css/style.css" %}">
 </head>
 <body>
-    <p class = "lal_bg">This is static file</p>
-    <img src="{% static "image/banner03.jpg" %}" alt="">
+    {% comment %} <p class = "lal_bg">This is static file</p>
+    <img src="{% static "image/banner03.jpg" %}" alt=""> {% endcomment %}
+
+    {% for name in names  %}
+        <p>{{ name }}</p>
+    {% endfor %}
+    <p class ="lal_bg">{{ age }}</p> 
 </body>
 </html>
