@@ -17,5 +17,6 @@ def test(request):
     return render(request, "test.html", context);
 
 
-
+def create_form(request):
+    return render(request, "dashboard/task_form.html")
  
