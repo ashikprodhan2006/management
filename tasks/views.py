@@ -68,7 +68,7 @@ def create_form(request):
     return render(request, "dashboard/task_form.html", context)
  
 
-def view_task(request):
+# def view_task(request):
     # select_related (ForeignKey, OneToOneField)
 
     # tasks = Task.objects.all()
@@ -80,6 +80,14 @@ def view_task(request):
     """ prefetch_related (reverse ForeignKey, ManyToMany) """
     # tasks = Project.objects.prefetch_related('task_set').all()
     # tasks = Project.objects.all()
-    tasks = Task.objects.prefetch_related('assigned_to').all()
+    # tasks = Task.objects.prefetch_related('assigned_to').all()
 
-    return render(request, "show_task.html", {"tasks": tasks})
+    # return render(request, "show_task.html", {"tasks": tasks})
+
+
+def view_task(request):
+    # task_count = Task.objects.aggregate(num_task = Count('id'))
+    # task_count = Project.objects.annotate(num_task = Count('task'))
+    projects = Project.objects.annotate(num_task = Count('task')).order_by('num_task')
+
+    return render(request, "show_task.html", {"projects": projects})

@@ -6,62 +6,23 @@
     <title>Document</title>
 </head>
 <body>
-    <div>
-        {% comment %} {{tasks}} {% endcomment %}
-
-        <ul>
-            {% for task in tasks %}
-            
-            <li>
-                    {% comment %} <p>{{task.title}}</p>
-                    <span>{{task.status}}</span> {% endcomment %}
-
-                    {% comment %} <p>{{task.task}}</p>
-                    <span>{{task.priority}}</span> {% endcomment %}
-                    
-                    
-                    {% comment %} <p>{{task.title}}</p>
-                    <span>{{task.details.priority}}</span> {% endcomment %}
-                    
-                    {% comment %} <p>{{task.task.title}}</p>
-                    <span>{{task.priority}}</span> {% endcomment %}
-
-                    <p>{{task.title}}</p>
-                    <span>{{task.project.name}}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>  
     
 
+    {% comment %} <div> {% endcomment %}
+        {% comment %} <p>{{task_count}}</p> {% endcomment %}
+        {% comment %} <p>{{task_count.num_task}}</p> {% endcomment %}
+        {% comment %} <p>{{ task_count }}</p> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
+
     <div>
-        <ul>
-            {% for project in tasks %}
+        <ol>
+            {% for project in projects %}
                 <li>
                     <p>{{project.name}}</p>
+                    <p>{{project.num_task}}</p>
 
-                    {% comment %} <span>{{ project.task_set.title }}</span> {% endcomment %}
-                    {% for task in project.task_set.all %}
-                        <p>{{task.title}}</p>
-                    {% endfor %}
-                </li>
             {% endfor %}
-        </ul>
-    </div>
-
-
-    <div>
-        <ul>
-            {% for task in tasks %}
-                <li>
-                    <p>{{task.title}}</p>
-
-                    {% for emp in task.assigned_to.all %}
-                        <p>{{emp.name}}</p>
-                    {% endfor %}
-                </li>
-            {% endfor %}
-        </ul>
+        </ol>
     </div>
 </body>
 </html>
