@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskForm, TaskModelForm
-from tasks.models import Employee, Task
+from tasks.models import Employee, Task, TaskDetail
+from django.db.models import Q, Max, Min, Avg, Count
 
 def managers_dashboard(request):
     return render(request, "dashboard/manager_dashboard.html");
@@ -68,15 +69,22 @@ def create_form(request):
  
 
 def view_task(request):
-    # retrive all data from tasks nodel
-    tasks = Task.objects.all()
+#   # Show the tasks that are completed
+    # tasks = Task.objects.filter(status = "COMPLETED")
+
+    # # Show the task which due date is today
+    # tasks = Task.objects.filter(due_date = date.today())
+
+    # Show the task whose priority is not low
+    # tasks = TaskDetail.objects.exclude(priority = "L")
+
+    """ Show the task that contain word 'paper' and status Pending """
+    # tasks = Task.objects.filter(title__icontains = "c", status = "PENDING")
+
+    """ Show the task which are pending or in-progress """
+    # tasks = Task.objects.filter(Q(status = "PENDING") | Q(status = "IN_PROGRESS"))
     
+    # tasks = Task.objects.filter(status = "KDJFKSAI").exists()
+    tasks = Task.objects.filter(status = "PENDING").exists()
 
-    # retrive a specific task
-    # task_3 = Task.objects.get(id = 1)
-    # task_3 = Task.objects.get(title = "jdklf jfdkla dfjkd sajkfl htl")
-    task_3 = Task.objects.get(pk = 1)
-
-    #Fetch the first task
-    first_task = Task.objects.first()
-    return render(request, "show_task.html", {"tasks": tasks, "task3": task_3, "frist_task": first_task})
+    return render(request, "show_task.html", {"tasks": tasks})
