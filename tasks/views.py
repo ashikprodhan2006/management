@@ -59,9 +59,24 @@ def create_form(request):
             #     task.assigned_to.add(employee)
             
             # return HttpResponse("Task Added successfully")
+            
 
     context = {
         "form": form
     }
     return render(request, "dashboard/task_form.html", context)
  
+
+def view_task(request):
+    # retrive all data from tasks nodel
+    tasks = Task.objects.all()
+    
+
+    # retrive a specific task
+    # task_3 = Task.objects.get(id = 1)
+    # task_3 = Task.objects.get(title = "jdklf jfdkla dfjkd sajkfl htl")
+    task_3 = Task.objects.get(pk = 1)
+
+    #Fetch the first task
+    first_task = Task.objects.first()
+    return render(request, "show_task.html", {"tasks": tasks, "task3": task_3, "frist_task": first_task})

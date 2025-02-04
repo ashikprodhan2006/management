@@ -22,11 +22,11 @@ class Task(models.Model):
     # )
     # notun_string = models.CharField(max_length=100, default="")
 
-    # STATUS_CHOICES = {
-    #     ('PENDING', 'Pending'),
-    #     ('IN_PROGRESS', 'In Progress'),
-    #     ('COMPLETED', 'Completed')
-    # }
+    STATUS_CHOICES = {
+        ('PENDING', 'Pending'),
+        ('IN_PROGRESS', 'In Progress'),
+        ('COMPLETED', 'Completed')
+    }
 
     project = models.ForeignKey(
         "Project",
@@ -42,14 +42,14 @@ class Task(models.Model):
     title = models.CharField(max_length = 250)
     description = models.TextField()
     due_date = models.DateField()
-    # status = models.CharField(
-    #     max_length = 15, choices = STATUS_CHOICES, default = "PENDING")
+    status = models.CharField(
+        max_length = 15, choices = STATUS_CHOICES, default = "PENDING")
     is_completed = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
-    # def __str__(self):
-    #     return self.title
+    def __str__(self):
+        return self.title
 
 # One to One
 # Many to One
@@ -74,10 +74,10 @@ class TaskDetail(models.Model):
     priority = models.CharField(
         max_length = 1, choices = PRIORITY_OPTIONS, default = LOW
     )
-    # notes = models.TextField(blank = True, null = True)
+    notes = models.TextField(blank = True, null = True)
 
-    # def __str__(self):
-    #     return f"Details form Task {self.task.title}"
+    def __str__(self):
+        return f"Details form Task {self.task.title}"
 
 
 # Task.objects.get(id = 2)
@@ -87,11 +87,11 @@ class TaskDetail(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length = 100)
-    # description = models.TextField(blank = True, null = True)
+    description = models.TextField(blank = True, null = True)
     start_date = models.DateField()
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 
 
