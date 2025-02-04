@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskForm, TaskModelForm
-from tasks.models import Employee, Task, TaskDetail
+from tasks.models import Employee, Task, TaskDetail, Project
 from django.db.models import Q, Max, Min, Avg, Count
 
 def managers_dashboard(request):
@@ -69,22 +69,17 @@ def create_form(request):
  
 
 def view_task(request):
-#   # Show the tasks that are completed
-    # tasks = Task.objects.filter(status = "COMPLETED")
+    # select_related (ForeignKey, OneToOneField)
 
-    # # Show the task which due date is today
-    # tasks = Task.objects.filter(due_date = date.today())
+    # tasks = Task.objects.all()
+    # tasks = Task.objects.select_related('details').all()
+    # tasks = TaskDetail.objects.select_related('task').all()
+    # tasks = Task.objects.select_related('project').all()
+    # tasks = Project.objects.select_related('task_set').all()
 
-    # Show the task whose priority is not low
-    # tasks = TaskDetail.objects.exclude(priority = "L")
-
-    """ Show the task that contain word 'paper' and status Pending """
-    # tasks = Task.objects.filter(title__icontains = "c", status = "PENDING")
-
-    """ Show the task which are pending or in-progress """
-    # tasks = Task.objects.filter(Q(status = "PENDING") | Q(status = "IN_PROGRESS"))
-    
-    # tasks = Task.objects.filter(status = "KDJFKSAI").exists()
-    tasks = Task.objects.filter(status = "PENDING").exists()
+    """ prefetch_related (reverse ForeignKey, ManyToMany) """
+    # tasks = Project.objects.prefetch_related('task_set').all()
+    # tasks = Project.objects.all()
+    tasks = Task.objects.prefetch_related('assigned_to').all()
 
     return render(request, "show_task.html", {"tasks": tasks})
