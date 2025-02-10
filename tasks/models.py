@@ -14,13 +14,6 @@ class Employee(models.Model):
     
 
 class Task(models.Model):
-    # project = models.ForeignKey(
-    #     "Project",
-    #     on_delete=models.CASCADE,
-    #     null=True,
-    #     blank=True
-    # )
-    # notun_string = models.CharField(max_length=100, default="")
 
     STATUS_CHOICES = {
         ('PENDING', 'Pending'),
@@ -70,7 +63,6 @@ class TaskDetail(models.Model):
         Task, on_delete = models.CASCADE,
         related_name ="details"
     )
-    # assigned_to = models.CharField(max_length = 100)
     priority = models.CharField(
         max_length = 1, choices = PRIORITY_OPTIONS, default = LOW
     )
@@ -78,11 +70,6 @@ class TaskDetail(models.Model):
 
     def __str__(self):
         return f"Details form Task {self.task.title}"
-
-
-# Task.objects.get(id = 2)
-# select * from task where id = 2
-# ORM
 
 
 class Project(models.Model):
@@ -93,7 +80,15 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+# /////////////////////////////////////////////
 
+class Event(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Event Name")
+    date = models.DateField(verbose_name="Event Date")
+    description = models.TextField(verbose_name="Event Description", blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 

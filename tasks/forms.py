@@ -1,5 +1,7 @@
 from django import forms
-from tasks.models import Task, TaskDetail
+from tasks.models import Task, TaskDetail, Event
+from django.core.exceptions import ValidationError
+from datetime import date
 
 class TaskForm(forms.Form):
     title = forms.CharField(max_length = 250, label = 'Task Title');
@@ -9,14 +11,23 @@ class TaskForm(forms.Form):
     assigned_to = forms.MultipleChoiceField(
         widget = forms.CheckboxSelectMultiple, choices = [], label = 'Assigned To')
     
+    # def __init__(self, *args, **kwargs):
+    #     # print(args, kwargs)
+    #     employees = kwargs.pop("employees", [])
+    #     # print(employees)
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['assigned_to'].choices = [
+    #         (emp.id, emp.name) for emp in employees
+    #     ]
     def __init__(self, *args, **kwargs):
-        # print(args, kwargs)
         employees = kwargs.pop("employees", [])
-        # print(employees)
         super().__init__(*args, **kwargs)
-        self.fields['assigned_to'].choices = [
-            (emp.id, emp.name) for emp in employees
-        ]
+        try:
+            self.fields['assigned_to'].choices = [
+                (emp.id, emp.name) for emp in employees
+            ]
+        except Exception as e:
+            self.fields['assigned_to'].choices = []
 
 
 class StyledFormMixin:
@@ -62,24 +73,17 @@ class TaskModelForm(StyledFormMixin, forms.ModelForm):
             'due_date': forms.SelectDateWidget,
             'assigned_to': forms.CheckboxSelectMultiple
         }
+
+
+
+# class TaskModelForm(StyledFormMixin, forms.ModelForm):
+#     def clean_due_date(self):
+#         due_date = self.cleaned_data.get("due_date")
+#         if due_date < date.today():
+#             raise ValidationError("Due date cannot be in the past.")
+#         return due_date
         
-        """ Manual Widget """
-        # widgets = {
-        #     'title': forms.TextInput(attrs={
-        #         'class': "border-2 border-gray-300 w-full rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500",
-        #         'placeholder': "Enter a descriptive task title"
-        #     }),
-        #     'description': forms.Textarea(attrs={
-        #         'class': "border-2 border-gray-300 w-full p-3 rounded-lg shadow-sm resize-none focus:outline-none focus:border-rose-500 focus:ring-rose-500",
-        #         'placeholder': "Procide detailed task", 'rows': 5
-        #     }),
-        #     'due_date': forms.SelectDateWidget(attrs ={
-        #         'class': "border-2 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
-        #     }),
-        #     'assigned_to': forms.CheckboxSelectMultiple(attrs ={
-        #         'class': "space-y-2",
-        #     }),
-        # }
+       
 
 
     """ Widget using mixins """
@@ -98,3 +102,21 @@ class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
     def __init__(self, *arg, **kwarg):
         super().__init__(*arg, **kwarg)
         self.apply_styled_widgets()
+
+
+
+
+# ////////////////////////////////////
+
+
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name', 'date', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Event Description'}),
+        }
