@@ -2,6 +2,7 @@ from django import forms
 import re
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from tasks.forms import StyledFormMixin
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -17,7 +18,7 @@ class RegisterForm(UserCreationForm):
         # self.fields['username'].help_text = None
 
 
-class CustomRegistrationForm(forms.ModelForm):
+class CustomRegistrationForm(StyledFormMixin, forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     class Meta:
@@ -74,5 +75,9 @@ class CustomRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Password do not match")
 
         return cleaned_data
+    
 
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
 
