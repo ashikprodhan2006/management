@@ -149,7 +149,7 @@ def view_task(request):
 
 
 def event_management(request):
-    return render(request, "event_management.html")
+    return render(request, "index.html")
 
 def event_management1(request):
     return render(request, "event_management1.html")

@@ -1,186 +1,164 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "event.html" %}
+<title>{% block title %}Event Management{% endblock title %}</title>
+{% block tasks %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+    <main class="ml-10 mr-10">
+        <!-- Search Bar and Date Filters -->
+        <section class="my-8">
+            <div class="container mx-auto flex flex-col items-center space-y-4">
+                <!-- Search Bar -->
+                <div class="flex space-x-4 w-full max-w-lg">
+                    <input type="text" id="searchInput" placeholder="Search Events..."
+                        class="p-3 w-full border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-red-600" />
+                    <button onclick="filterEvents()"
+                        class="bg-red-700 text-white px-6 py-3 rounded-r-lg hover:bg-red-800 focus:outline-none">
+                        Search
+                    </button>
+                </div>
 
-<body class="bg-gray-100">
+                <!-- Date Filters -->
+                <div class="flex space-x-4 w-full max-w-lg">
+                    <input type="date" id="startDate"
+                        class="p-3 w-1/2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" />
+                    <input type="date" id="endDate"
+                        class="p-3 w-1/2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" />
+                </div>
 
-    <!-- Navbar -->
-    <nav class="bg-red-700 p-4 text-white">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-semibold">Event Manager</div>
-            <ul class="flex space-x-6">
-                <li><a href="#" class="hover:text-gray-300">Home</a></li>
-                <li><a href="#" class="hover:text-gray-300">Events</a></li>
-                <li><a href="#" class="hover:text-gray-300">Manage</a></li>
-                <li><a href="#" class="hover:text-gray-300">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Search Bar and Date Filters -->
-    <section class="my-8">
-        <div class="container mx-auto flex flex-col items-center space-y-4">
-            <!-- Search Bar -->
-            <div class="flex space-x-4 w-full max-w-lg">
-                <input type="text" id="searchInput" placeholder="Search Events..."
-                    class="p-3 w-full border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-red-600" />
                 <button onclick="filterEvents()"
-                    class="bg-red-700 text-white px-6 py-3 rounded-r-lg hover:bg-red-800 focus:outline-none">
-                    Search
+                    class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 focus:outline-none">
+                    Apply Filters
                 </button>
             </div>
+        </section>
 
-            <!-- Date Filters -->
-            <div class="flex space-x-4 w-full max-w-lg">
-                <input type="date" id="startDate"
-                    class="p-3 w-1/2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" />
-                <input type="date" id="endDate"
-                    class="p-3 w-1/2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600" />
+        <section>
+            <!--All Event- Bootstrap Tab and Pills-->
+            <div class="flex space-x-4 mb-6 mx-auto">
+                <a href="/_" class="px-4 py-2 rounded-lg bg-red-700 text-white">All (10)</a>
+                <a href="?category=1" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-red-700 hover:text-white">Technology (2)</a>
+                <a href="?category=2" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-red-700 hover:text-white">Seminar (2)</a>
+                <a href="?category=3" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-red-700 hover:text-white">Social (3)</a>
+                <a href="?category=4" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-red-700 hover:text-white">Conferences (1)</a>
+                <a href="?category=5" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-red-700 hover:text-white">Workshops (2)</a>
             </div>
+        </section>
 
-            <button onclick="filterEvents()"
-                class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-900 focus:outline-none">
-                Apply Filters
-            </button>
-        </div>
-    </section>
-
-    <!-- Event Overview Section -->
-    <section class="my-8">
-        <div class="container mx-auto">
-            <h2 class="text-3xl font-semibold mb-6 text-red-700">Upcoming Events</h2>
-            <div id="eventList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-02-15">
-                    <h3 class="text-xl font-bold">Event 1</h3>
-                    <p class="mt-2">Date: 15 Feb 2025</p>
+        <section class="my-8">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-semibold mb-6 text-red-700">Upcoming Events</h2>
+                <div id="eventList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="/events/events/1/" class="text-white hover:underline">
+                        <div class="p-4 bg-black text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Tech Summit 2025</h2>
+                            <p class="text-white">Tech Summit 2025 event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 26, 2025 | Time: 04 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 1</p>
+                            <p class="text-sm text-white bg-red-700 p-1 rounded text-center">Category: Seminar</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/2/" class="text-white hover:underline">
+                        <div class="p-4 bg-red-700 text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">AI Conference</h2>
+                            <p class="text-white">AI Conference event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 16, 25 | Time: 01 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 2</p>
+                            <p class="text-sm text-white bg-black p-1 rounded">Category: Social</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/3/" class="text-white hover:underline">
+                        <div class="p-4 bg-black text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Django Meetup</h2>
+                            <p class="text-white">Django Meetup event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 14, 25 | Time: 02 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 3</p>
+                            <p class="text-sm text-white bg-red-700 p-1 rounded">Category: Social</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/4/" class="text-white hover:underline">
+                        <div class="p-4 bg-red-700 text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Python Workshop</h2>
+                            <p class="text-white">Python Workshop event description.</p>
+                            <p class="text-sm text-white">Date: Jan. 30, 2025 | Time: 2 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 4</p>
+                            <p class="text-sm text-white bg-black p-1 rounded">Category: Workshops</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/5/" class="text-white hover:underline">
+                        <div class="p-4 bg-black text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Data Science Bootcamp</h2>
+                            <p class="text-white">Data Science Bootcamp event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 22, 2025 | Time: 08</p>
+                            <p class="text-sm text-white">Location: Location 5</p>
+                            <p class="text-sm text-white bg-red-700 p-1 rounded">Category: Seminar</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/6/" class="text-white hover:underline">
+                        <div class="p-4 bg-red-700 text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Startup Pitch</h2>
+                            <p class="text-white">Startup Pitch event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 05, 2025 | Time: 8 a.m.</p>
+                            <p class="text-sm text-white">Location: Location 6</p>
+                            <p class="text-sm text-white bg-black p-1 rounded">Category: Social</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/7/" class="text-white hover:underline">
+                        <div class="p-4 bg-black text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Blockchain Expo</h2>
+                            <p class="text-white">Blockchain Expo event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 07, 2025 | Time: 02 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 7</p>
+                            <p class="text-sm text-white bg-red-700 p-1 rounded">Category: Workshops</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/8/" class="text-white hover:underline">
+                        <div class="p-4 bg-red-700 text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Web Dev Seminar</h2>
+                            <p class="text-white">Web Dev Seminar event description.</p>
+                            <p class="text-sm text-white">Date: Jan. 31, 2025 | Time: 03 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 8</p>
+                            <p class="text-sm text-white bg-black p-1 rounded">Category: Conferences</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/9/" class="text-white hover:underline">
+                        <div class="p-4 bg-black text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Cloud Computing Workshop</h2>
+                            <p class="text-white">Cloud Computing Workshop event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 10, 2025 | Time: 08 a.m.</p>
+                            <p class="text-sm text-white">Location: Location 9</p>
+                            <p class="text-sm text-white bg-red-700 p-1 rounded">Category: Technology</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/10/" class="text-white hover:underline">
+                        <div class="p-4 bg-red-700 text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">Cybersecurity Forum</h2>
+                            <p class="text-white">Cybersecurity Forum event description.</p>
+                            <p class="text-sm text-white">Date: Jan. 30, 2025 | Time: 07 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 10</p>
+                            <p class="text-sm text-white bg-black p-1 rounded">Category: Technology</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/2/" class="text-white hover:underline">
+                        <div class="p-4 bg-black text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">AI Conference</h2>
+                            <p class="text-white">AI Conference event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 21, 25 | Time: 07 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 2</p>
+                            <p class="text-sm text-white bg-red-700 p-1 rounded">Category: Community</p>
+                        </div>
+                    </a>
+                    <a href="/events/events/2/" class="text-white hover:underline">
+                        <div class="p-4 bg-red-700 text-white shadow-lg rounded-lg">
+                            <h2 class="text-xl font-semibold">AI Conference</h2>
+                            <p class="text-white">AI Conference event description.</p>
+                            <p class="text-sm text-white">Date: Feb. 06, 25 | Time: 09 p.m.</p>
+                            <p class="text-sm text-white">Location: Location 2</p>
+                            <p class="text-sm text-white bg-black p-1 rounded">Category: Gatherings</p>
+                        </div>
+                    </a>
+                    
+                    
                 </div>
-                <div class="event bg-red-700 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-03-10">
-                    <h3 class="text-xl font-bold">Event 2</h3>
-                    <p class="mt-2">Date: 10 Mar 2025</p>
-                </div>
-                <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-04-05">
-                    <h3 class="text-xl font-bold">Event 3</h3>
-                    <p class="mt-2">Date: 5 Apr 2025</p>
-                    <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                        data-date="2025-02-15">
-                    </div>
-                </div>
-                <div class="event bg-red-700 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-03-10">
-                    <h3 class="text-xl font-bold">Event 2</h3>
-                    <p class="mt-2">Date: 10 Mar 2025</p>
-                </div>
-                <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-04-05">
-                    <h3 class="text-xl font-bold">Event 3</h3>
-                    <p class="mt-2">Date: 5 Apr 2025</p>
-                    <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                        data-date="2025-02-15">
-                    </div>
-                </div>
-                <div class="event bg-red-700 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-03-10">
-                    <h3 class="text-xl font-bold">Event 2</h3>
-                    <p class="mt-2">Date: 10 Mar 2025</p>
-                </div>
-                <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-04-05">
-                    <h3 class="text-xl font-bold">Event 3</h3>
-                    <p class="mt-2">Date: 5 Apr 2025</p>
-                    <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                        data-date="2025-02-15">
-                    </div>
-                </div>
-                <div class="event bg-red-700 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-03-10">
-                    <h3 class="text-xl font-bold">Event 2</h3>
-                    <p class="mt-2">Date: 10 Mar 2025</p>
-                </div>
-                <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-04-05">
-                    <h3 class="text-xl font-bold">Event 3</h3>
-                    <p class="mt-2">Date: 5 Apr 2025</p>
-                    <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                        data-date="2025-02-15">
-                    </div>
-                </div>
-                <div class="event bg-red-700 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-03-10">
-                    <h3 class="text-xl font-bold">Event 2</h3>
-                    <p class="mt-2">Date: 10 Mar 2025</p>
-                </div>
-                <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-04-05">
-                    <h3 class="text-xl font-bold">Event 3</h3>
-                    <p class="mt-2">Date: 5 Apr 2025</p>
-                    <div class="event bg-black text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                        data-date="2025-02-15">
-                    </div>
-                </div>
-                <div class="event bg-red-700 text-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300"
-                    data-date="2025-03-10">
-                    <h3 class="text-xl font-bold">Event 2</h3>
-                    <p class="mt-2">Date: 10 Mar 2025</p>
-                </div>
-            </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-red-700 text-white py-10">
-        <div
-            class="container mx-auto flex flex-col md:flex-row justify-between items-center px-6 space-y-6 md:space-y-0">
-
-            <!-- About Section -->
-            <div class="text-center md:text-left">
-                <h3 class="text-xl font-semibold mb-3">About Us</h3>
-                <p class="text-gray-300 max-w-sm"> </p>
-            </div>
-
-            <!-- Contact Info -->
-            <div class="text-center">
-                <h3 class="text-xl font-semibold mb-3">Contact Info</h3>
-                <p class="text-gray-300">📍 123, Event Street, Dhaka, Bangladesh</p>
-                <p class="text-gray-300">📞 +880 1234 567 890</p>
-                <p class="text-gray-300">✉ info@eventmanager.com</p>
-            </div>
-
-            <!-- Social Media -->
-            <div class="text-center md:text-right">
-                <h3 class="text-xl font-semibold mb-3">Follow Us</h3>
-                <div class="flex justify-center md:justify-end space-x-4 text-2xl">
-                    <a href="#" class="hover:text-gray-400"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                            fill="currentColor" class="size-6">
-                            <path
-                                d="M19.5 22.5a3 3 0 0 0 3-3v-8.174l-6.879 4.022 3.485 1.876a.75.75 0 1 1-.712 1.321l-5.683-3.06a1.5 1.5 0 0 0-1.422 0l-5.683 3.06a.75.75 0 0 1-.712-1.32l3.485-1.877L1.5 11.326V19.5a3 3 0 0 0 3 3h15Z" />
-                            <path
-                                d="M1.5 9.589v-.745a3 3 0 0 1 1.578-2.642l7.5-4.038a3 3 0 0 1 2.844 0l7.5 4.038A3 3 0 0 1 22.5 8.844v.745l-8.426 4.926-.652-.351a3 3 0 0 0-2.844 0l-.652.351L1.5 9.589Z" />
-                        </svg>
-                        <i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-gray-400"><i class="fas fa-facebook"></i></a>
-                    <a href="#" class="hover:text-gray-400"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="hover:text-gray-400"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-gray-400"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="hover:text-gray-400"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="hover:text-gray-400"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Copyright Section -->
-        <div class="text-center text-gray-300 mt-8 border-t border-gray-600 pt-4">
-            <p>&copy; 2025 Event Manager. All Rights Reserved.</p>
-        </div>
-    </footer>
-</body>
-
-</html>
+        </section>
+    </main>
+{% endblock tasks %}
+   
