@@ -3,6 +3,7 @@ import re
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from tasks.forms import StyledFormMixin
+from django.contrib.auth.forms import AuthenticationForm
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -81,3 +82,13 @@ class CustomRegistrationForm(StyledFormMixin, forms.ModelForm):
         super().__init__(*arg, **kwarg)
         self.apply_styled_widgets()
 
+
+class LoginForm(StyledFormMixin, AuthenticationForm):
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg, **kwargs)
+
+
+
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
