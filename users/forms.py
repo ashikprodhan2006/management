@@ -1,7 +1,7 @@
 from django import forms
 import re
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission, Group
 from tasks.forms import StyledFormMixin
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -92,3 +92,32 @@ class LoginForm(StyledFormMixin, AuthenticationForm):
     def __init__(self, *arg, **kwarg):
         super().__init__(*arg, **kwarg)
         self.apply_styled_widgets()
+
+
+class AssignRoleForm(StyledFormMixin, forms.Form):
+    role = forms.ModelChoiceField(queryset=Group.objects.all(), empty_label="Select a Role")
+
+
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
+
+
+class CreateGroupForm(StyledFormMixin, forms.ModelForm):
+    permissions = forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False,
+        label='Assign Permission'
+    )
+    class Meta:
+        model = Group
+        fields = ['name', 'permissions']
+
+
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
+
+
+

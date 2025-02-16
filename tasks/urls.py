@@ -1,11 +1,11 @@
 from django.urls import path
-from tasks.views import managers_dashboard, user_dashboard, test, create_form, view_task, update_task, delete_task, event_management, dashboard, event, event_form, event, event_management1
+from tasks.views import managers_dashboard, employee_dashboard, test, create_form, view_task, update_task, delete_task, event_management, dashboard, event, event_form, event, event_management1
 
 
 urlpatterns = [
     path('manager-dashboard/', managers_dashboard, name = 'manager-dashboard'),
     path('dashboard/', dashboard, name = 'dashboard'),
-    path("user-dashboard/", user_dashboard),
+    path("user-dashboard/", employee_dashboard),
     path('test/', test),
     path('create-form/', create_form, name = 'create-form'),
     path('view-task/', view_task),
