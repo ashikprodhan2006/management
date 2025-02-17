@@ -1,15 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static "css/output.css" %}">
-</head>
-<body>
-    <h1>Welcome to Autentication System</h1>
-    <div>
+{% extends "base.html" %}
+{% block content %}
+    <div class="mx-auto w-1/2 my-9">
         {% if form.non_field_errors %}
             {% for error in form.non_field_errors %}
                 {{ error }}
@@ -32,8 +23,7 @@
                     {% endif %}
                 </p>
             {% endfor %}
-            <button class="bg-rose-500 text-white px-2 py-1 rounded-lg" type="Submit">Sign Up</button>
+            <button class="bg-rose-500 text-white px-2 py-1 mt-3 rounded" type="Submit">Sign Up</button>
         </form>
     </div>
-</body>
-</html>
+{% endblock content %}
