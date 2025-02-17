@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm, EventForm
-from tasks.models import Employee, Task, TaskDetail, Project, Event
+from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm
+from tasks.models import Employee, Task, TaskDetail, Project
 from django.db.models import Q, Max, Min, Avg, Count
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
@@ -46,9 +46,6 @@ def managers_dashboard(request):
     return render(request, "dashboard/manager_dashboard.html", context);
 
 
-
-def dashboard(request):
-    return render(request, "dashboard/dashboard.html");
 
 @user_passes_test(is_employee)
 def employee_dashboard(request):
@@ -166,32 +163,4 @@ def view_task(request):
 
 
 
-def event_management(request):
-    return render(request, "event_management.html")
 
-def event_management1(request):
-    return render(request, "event_management1.html")
-
-def event_form(request):
-    return render(request, "event_form.html")
-
-def event(request):
-    return render(request, "event.html")
-
-
-
-
-# /////////////////////////////////////////
-
-
-def event(request):
-    events = Event.objects.all()
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-    else:
-        form = EventForm()
-
-    return render(request, "index.html", {"form": form, "events": events})

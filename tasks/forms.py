@@ -105,18 +105,3 @@ class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
 
 
 
-
-# ////////////////////////////////////
-
-
-
-
-class EventForm(forms.ModelForm):
-    class Meta:
-        model = Event
-        fields = ['name', 'date', 'description']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name'}),
-            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Event Description'}),
-        }

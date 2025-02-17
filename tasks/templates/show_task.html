@@ -6,16 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-
     <div>
-        <ol>
+       <ol>
             {% for project in projects %}
                 <li>
                     <p>{{project.name}}</p>
                     <p>{{project.num_task}}</p>
-
+                </li>
             {% endfor %}
-        </ol>
+            </ol> 
+            {% comment %} <p>{{task_count}}</p> {% endcomment %}
     </div>
 </body>
 </html>
