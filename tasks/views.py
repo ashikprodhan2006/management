@@ -151,9 +151,6 @@ def view_task(request):
 def event_management(request):
     return render(request, "index.html")
 
-def event_management1(request):
-    return render(request, "event_management1.html")
-
 def event_form(request):
     return render(request, "event_form.html")
 
