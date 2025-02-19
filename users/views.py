@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse
-# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User, Group
-from django.contrib.auth import authenticate, login, logout
-from users.forms import RegisterForm, CustomRegistrationForm, AssignRoleForm, CreateGroupForm
+from django.contrib.auth import login, logout
+from users.forms import CustomRegistrationForm, AssignRoleForm, CreateGroupForm
 from django.contrib import messages
-# from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 from users.forms import LoginForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -17,77 +16,42 @@ from django.db.models import Prefetch
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
 
+
 def sign_up(request):
-    if request.method == 'GET':
-        # form = UserCreationForm()
-        # form = RegisterForm()
-        form = CustomRegistrationForm()
-
+    form = CustomRegistrationForm()
     if request.method == 'POST':
-        # form = UserCreationForm(request.POST)
-        # form = RegisterForm(request.POST)
         form = CustomRegistrationForm(request.POST)
-
         if form.is_valid():
-            # print(form.cleaned_data)
-            # form.save()
-
-            # username = form.cleaned_data.get('username')
-            # password = form.cleaned_data.get('password1')
-            # confirm_password = form.cleaned_data.get('password2')
-
-            # if password == confirm_password:
-            #     User.objects.create(username=username, password=password)
-            # else:
-            #     print("Password are not same")
-
             user = form.save(commit=False)
-            print('user', user)
             user.set_password(form.cleaned_data.get('password1'))
-            print(form.cleaned_data)
             user.is_active = False
-            form.save()
-            messages.success(request, 'A Confirmation mail sent. Please check your email')
-
+            user.save()
+            messages.success(
+                request, 'A Confirmation mail sent. Please check your email')
             return redirect('sign-in')
+
         else:
             print("Form is not valid")
-    return render(request, "registration/register.html", {"form": form})
+    return render(request, 'registration/register.html', {"form": form})
 
 
 def sign_in(request):
-    # form = AuthenticationForm()
     form = LoginForm()
     if request.method == 'POST':
-        # print(request.POST.get('username'))
-        # print(request.POST)
-
-        # username = request.POST.get('username')
-        # password = request.POST.get('password')
-
-        # user = authenticate(request, username=username, password=password)
-
-        # form = AuthenticationForm(data=request.POST)
         form = LoginForm(data=request.POST)
-        # user = form.get_user()
-        # if user is not None:
-        #     login(request, user)
-        #     return redirect('home')
-
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             return redirect('home')
-
     return render(request, 'registration/login.html', {'form': form})
 
 
+@login_required
 def sign_out(request):
     if request.method == 'POST':
         logout(request)
-
         return redirect('sign-in')
-    
+
 
 def activate_user(request, user_id, token):
     try:
@@ -98,19 +62,21 @@ def activate_user(request, user_id, token):
             return redirect('sign-in')
         else:
             return HttpResponse('Invalid Id or token')
+
     except User.DoesNotExist:
         return HttpResponse('User not found')
 
+
 @user_passes_test(is_admin, login_url='no-permission')
 def admin_dashboard(request):
-    # users = User.objects.all()
-    # users = User.objects.prefetch_related('groups').all()
-    users = User.objects.prefetch_related(Prefetch('groups', queryset=Group.objects.all(), to_attr='all_groups')).all()
-    
+    users = User.objects.prefetch_related(
+        Prefetch('groups', queryset=Group.objects.all(), to_attr='all_groups')
+    ).all()
+
+    print(users)
+
     for user in users:
-        # if user.groups.exists():
-        if user.all_gropus:
-            # user.group_name = user.groups.first().name
+        if user.all_groups:
             user.group_name = user.all_groups[0].name
         else:
             user.group_name = 'No Group Assigned'
@@ -126,12 +92,12 @@ def assign_role(request, user_id):
         form = AssignRoleForm(request.POST)
         if form.is_valid():
             role = form.cleaned_data.get('role')
-            user.groups.clear()
+            user.groups.clear()  # Remove old roles
             user.groups.add(role)
-
-            messages.success(request, f"User {user.username} has been assigned to the {role.name} role")
+            messages.success(request, f"User {
+                             user.username} has been assigned to the {role.name} role")
             return redirect('admin-dashboard')
-    
+
     return render(request, 'admin/assign_role.html', {"form": form})
 
 
@@ -143,14 +109,29 @@ def create_group(request):
 
         if form.is_valid():
             group = form.save()
-            messages.success(request, f"Group {group.name} has been created successfully")
+            messages.success(request, f"Group {
+                             group.name} has been created successfully")
             return redirect('create-group')
-        
+
     return render(request, 'admin/create_group.html', {'form': form})
 
 
 @user_passes_test(is_admin, login_url='no-permission')
 def group_list(request):
-    # groups = Group.objects.all()
     groups = Group.objects.prefetch_related('permissions').all()
     return render(request, 'admin/group_list.html', {'groups': groups})
+
+
+""" 
+
+    Admin
+        - Sobkisui
+    Manager
+        - project
+        - task create
+    Employee
+        - Task read
+        - Task update
+    
+    Role Based Access Control (RBAC)
+"""
