@@ -122,16 +122,3 @@ def group_list(request):
     return render(request, 'admin/group_list.html', {'groups': groups})
 
 
-""" 
-
-    Admin
-        - Sobkisui
-    Manager
-        - project
-        - task create
-    Employee
-        - Task read
-        - Task update
-    
-    Role Based Access Control (RBAC)
-"""
