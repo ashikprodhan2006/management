@@ -1,31 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
 
-{% extends "dashboard/dashboard.html" %}
-<title>{% block title %}Manager Dashboard{% endblock title %}</title>
-{% block tasks %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <div class="bg-white rounded-xl shadow-sm">
-        <div class="divide-y divide-gray-100">
-            {% for task in tasks %}
-                <div class="flex items-center justify-between p-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span>{{ task.title }}</span>
-                        <div>
-                            <span class="text-gray-500">{{ task.created_at | timesince}}</span>
-                        </div>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <header>
+        <nav class="bg-red-700 p-4 text-white">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="text-2xl font-semibold">Event Manager</div>
+                <ul class="flex space-x-6">
+                    <div>
+                        <a type="#" href="{% url 'event-management' %}" class="px-2 py-2 bg-gray-100 text-gray-500 hover:text-rose-600 text-center font-serif rounded">Home</a>
                     </div>
-
-                    <!-- Edit and Delete Buttons -->
-                    <div class="flex items-center gap-2">
-                        <a href="{% url 'update-task' task.id %}" class="px-2 py-1 bg-green-500 text-white rounded-lg">Edit</a>
-                        <form action="{% url 'delete-task' task.id %}" method="POST">
-                            {% csrf_token %}
-                            <button type="submit" class="px-2 py-1 bg-red-500 text-white rounded-lg">Delete</button>
-                        </form>
+                    <div>
+                        <a type="#" href="{% url 'dashboard' %}" class="px-2 py-2 bg-gray-100 text-gray-500 hover:text-rose-600 text-center font-serif rounded">Dashboard</a>
                     </div>
+                    <li><a href="#" class="px-2 py-2 bg-gray-100 text-gray-500 hover:text-rose-600 text-center font-serif rounded">About</a></li>
+                    <li><a href="#" class="px-2 py-2 bg-gray-100 text-gray-500 hover:text-rose-600 text-center font-serif rounded">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    {% block content %}
+            
+    {% endblock content %}
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-10">
+        <div
+            class="container mx-auto flex flex-col md:flex-row justify-between items-center px-6 space-y-6 md:space-y-0">
+
+            <!-- About Section -->
+            <div class="text-center md:text-left">
+                <h3 class="text-xl font-semibold mb-3">About Us</h3>
+                <p class="text-gray-300 max-w-sm"> </p>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="text-center">
+                <h3 class="text-xl font-semibold mb-3">Contact Info</h3>
+                <p class="text-gray-300">📍 123, Event Street, Dhaka, Bangladesh</p>
+                <p class="text-gray-300">📞 +880 1234 567 890</p>
+                <p class="text-gray-300">✉ info@eventmanager.com</p>
+            </div>
+
+            <!-- Social Media -->
+            <div class="text-center md:text-right">
+                <h3 class="text-xl font-semibold mb-3">Follow Us</h3>
+                <div class="flex justify-center md:justify-end space-x-4 text-2xl">
+                    <a href="#" class="hover:text-gray-400"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-gray-400"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-400"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-400"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-gray-400"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="hover:text-gray-400"><i class="fab fa-whatsapp"></i></a>
                 </div>
-            {% endfor %}
+            </div>
         </div>
-    </div>
 
-{% endblock tasks %}
+        <!-- Copyright Section -->
+        <div class="text-center text-gray-300 mt-8 border-t border-gray-600 pt-4">
+            <p>&copy; 2025 Event Manager. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

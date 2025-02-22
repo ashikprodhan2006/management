@@ -17,6 +17,12 @@ def is_employee(user):
     return user.groups.filter(name='Employee').exists()
 
 @login_required
+@permission_required("is_dashboards", login_url='no-permission')
+def dashboards(request):
+    return render(request, "dashboard/dashboard.html");
+
+
+@login_required
 @permission_required("is_manager", login_url='no-permission')
 # @user_passes_test(is_manager, login_url='no-permission')
 def manager_dashboard(request):
@@ -72,17 +78,17 @@ def employee_dashboard(request):
     return render(request, "dashboard/user_dashboard.html")
 
 @login_required
-@permission_required("is_manager", login_url='no-permission')
+@permission_required("is_event_management", login_url='no-permission')
 def event_management(request):
     return render(request, "index.html")
 
 @login_required
-@permission_required("is_manager", login_url='no-permission')
+@permission_required("is_event_form", login_url='no-permission')
 def event_form(request):
     return render(request, "event_form.html")
 
 @login_required
-@permission_required("is_manager", login_url='no-permission')
+@permission_required("is_event", login_url='no-permission')
 def event(request):
     return render(request, "event.html")
 

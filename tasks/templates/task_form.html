@@ -1,3 +1,5 @@
+
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +18,7 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <form method="POST" enctype='multipart/form-data'>
+        <form method="POST">
             
             {% csrf_token %}
             {{ task_form }}
