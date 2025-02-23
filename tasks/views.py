@@ -71,21 +71,6 @@ def manager_dashboard(request):
 def employee_dashboard(request):
     return render(request, "dashboard/user_dashboard.html")
 
-@login_required
-@permission_required("is_manager", login_url='no-permission')
-def event_management(request):
-    return render(request, "index.html")
-
-@login_required
-@permission_required("is_manager", login_url='no-permission')
-def event_form(request):
-    return render(request, "event_form.html")
-
-@login_required
-@permission_required("is_manager", login_url='no-permission')
-def event(request):
-    return render(request, "event.html")
-
 
 @login_required
 @permission_required("tasks.add_task", login_url='no-permission')
@@ -189,5 +174,3 @@ def dashboard(request):
         return redirect('admin-dashboard')
 
     return redirect('no-permission')
-
-

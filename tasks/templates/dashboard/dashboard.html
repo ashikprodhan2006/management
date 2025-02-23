@@ -1,60 +1,129 @@
-{% extends "event.html" %}
+{% extends "base.html" %}
 {% block content %}
-    <div class="max-w-[1260px] mx-auto">
-        <main>
-
-            <div class= "p-4">
-                <div class= "max-w-6xl mx-auto p-6">
-                    <h1 class="text-3xl font-semibold mb-6">Dashboard</h1>
-                    <div class="mb-8 text-right">
-                        <a href="{% url 'event-form' %}" class="inline-block mt-6 bg-blue-500 hover:text-red-500-800 text-white px-4 py-4 p-2 rounded-lg">Create New Event</a>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <a href="{% url 'manager-dashboard' %}?type=total">
-                            <div class="bg-white p-6 rounded-xl shadow cursor-pointer" onclick="location.href='?filter = participants'">
-                                <h3 class="text-sm text-gray-500">Total Participants</h3>
-                                <p class="text-3xl font-bold">10</p>
-                            </div>
-                        </a>
-                        <a href="{% url 'manager-dashboard' %}?type=completed">
-                            <div class="bg-white p-6 rounded-xl shadow cursor-pointer" onclick="location.href='?filter = participants'">
-                                <h3 class="text-sm text-gray-500">Total Event</h3>
-                                <p class="text-3xl font-bold">{{ counts.completed }}</p>
-                            </div>
-                        </a>
-                        <a href="{% url 'manager-dashboard' %}?type=in progress">
-                            <div class="bg-white p-6 rounded-xl shadow cursor-pointer" onclick="location.href='?filter = participants'">
-                                <h3 class="text-sm text-gray-500">Upcoming Event</h3>
-                                <p class="text-3xl font-bold">2</p>
-                            </div>
-                        </a>
-                        <a href="{% url 'manager-dashboard' %}?type=todos">
-                            <div class="bg-white p-6 rounded-xl shadow cursor-pointer" onclick="location.href='?filter = participants'">
-                                <h3 class="text-sm text-gray-500">Past Event</h3>
-                                <p class="text-3xl font-bold">8</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div>
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class = "px-2 py-1 {% if message.tags == 'success' %} bg-green-500{% endif %} ">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-            {% block tasks %}
-            
-            {% endblock tasks %}
-
-
-
-        </main>
+  <div class='w-[1260px] mx-auto'>
+   {% comment %} Stats Grid  {% endcomment %}
+   <div class="grid grid-cols-4 gap-6 my-8">
+    <!-- Total Task  -->
+    <a href="{% url 'manager-dashboard' %}">
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <h3 class="text-sm font-medium text-gray-500 mb-4">TOTAL TASK</h3>
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-3xl font-semibold mb-1"> {{ counts.total }} </p>
+          <p class="text-gray-500 text-sm">11 last month</p>
+        </div>
+        <div class="bg-blue-100 p-3 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-6 h-6 text-blue-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
+  </a>
+    <!-- Completed Task  -->
+  <a href="{% url 'manager-dashboard' %}?type=completed">
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <h3 class="text-sm font-medium text-gray-500 mb-4">
+        COMPLETED TASK
+      </h3>
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-3xl font-semibold mb-1">{{counts.completed}} </p>
+          <p class="text-gray-500 text-sm">11 last month</p>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-6 h-6 text-green-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </a>
+    <!-- Task In Progress  -->
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <h3 class="text-sm font-medium text-gray-500 mb-4">
+        TASK IN PROGRESS
+      </h3>
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-3xl font-semibold mb-1"> {{counts.in_progress}} </p>
+          <p class="text-gray-500 text-sm">11 last month</p>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-6 h-6 text-yellow-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-6 shadow-sm">
+      <h3 class="text-sm font-medium text-gray-500 mb-4">TODOS</h3>
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-3xl font-semibold mb-1"> {{counts.pending}} </p>
+          <p class="text-gray-500 text-sm">11 last month</p>
+        </div>
+        <div class="bg-purple-100 p-3 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            class="w-6 h-6 text-purple-600"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="px-2 py-1 {% if message.tags == 'success' %}bg-green-500{% endif %} ">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+  </div>
+    {% block tasks %}
+    
+    {% endblock tasks %}
+  </div>
 {% endblock content %}
