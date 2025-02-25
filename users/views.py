@@ -8,6 +8,7 @@ from users.forms import LoginForm
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Prefetch
+from django.contrib.auth.views import LoginView
 
 
 # Create your views here.
@@ -23,7 +24,7 @@ def sign_up(request):
         form = CustomRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data.get('password1'))
+            user.set_password(form.cleaned_data.get('password'))
             user.is_active = False
             user.save()
             messages.success(
@@ -44,6 +45,14 @@ def sign_in(request):
             login(request, user)
             return redirect('home')
     return render(request, 'registration/login.html', {'form': form})
+
+
+class CustomLoginView(LoginView):
+    form_class = LoginForm
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        return next_url if next_url else super().get_success_url()
 
 
 @login_required
