@@ -4,15 +4,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Bengali:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
   </head>
   <body>
     <header class="bg-white shadow-md">
       <nav class="container mx-auto px-6 py-3">
         <div class="flex justify-between items-center">
           <a href="index.html" class="text-xl font-bold text-gray-800"
-            >Taskify</a
+            >Eventify</a
           >
           <div class="hidden md:flex space-x-4">
             <a
@@ -20,7 +31,7 @@
               class="text-gray-600 hover:text-gray-800"
               >Dashboard</a
             >
-            <a href="#" class="text-gray-600 hover:text-gray-800">Tasks</a>
+            <a href="#" class="text-gray-600 hover:text-gray-800">Event</a>
             <a href="{% url 'group-list' %}" class="text-gray-600 hover:text-gray-800"
               >Groups</a
             >
@@ -32,15 +43,8 @@
           </div>
           <div class="flex items-center">
             <div class="relative">
-              <button
-                id="user-menu-button"
-                class="flex items-center focus:outline-none"
-              >
-                <img
-                  class="h-8 w-8 rounded-full object-cover"
-                  src="https://placekitten.com/100/100"
-                  alt="User avatar"
-                />
+              <button id="user-menu-button" class="flex items-center focus:outline-none">
+                <img class="h-8 w-8 rounded-full object-cover" src="static/image/icon1.jpg" alt="User avatar"/>
               </button>
               <div
                 id="user-menu"
