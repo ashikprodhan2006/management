@@ -1,5 +1,5 @@
 from django import forms
-from tasks.models import Task, TaskDetail
+from tasks.models import Task, TaskDetail, Event
 
 # Django Form
 
@@ -76,3 +76,18 @@ class TaskDetailModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = TaskDetail
         fields = ['priority', 'notes', 'asset']
+
+
+
+
+# ////////////////////////////////////
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name', 'date', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event Name'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Event Description'}),
+        }

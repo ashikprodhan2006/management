@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm
-from tasks.models import Task, TaskDetail, Project
+from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm, EventForm
+from tasks.models import Task, TaskDetail, Project, Event
 from datetime import date
 from django.db.models import Q, Count, Max, Min, Avg
 from django.contrib import messages
@@ -197,3 +197,19 @@ def dashboard(request):
     return redirect('no-permission')
 
 
+
+
+# /////////////////////////////////////////
+
+
+def event_managements(request):
+    events = Event.objects.all()
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = EventForm()
+
+    return render(request, "index.html", {"form": form, "events": events})
