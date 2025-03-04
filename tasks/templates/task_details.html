@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}{{task.title}}-Task Details{% endblock title %}
+{% block title %}{{task.title}}-Event Details{% endblock title %}
 {% block content %}
-<div class="container mx-auto px-4 py-8 max-w-7xl">
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
     <h1 class="text-3xl font-bold mb-6">{{task.title}}</h1>
 
     <!-- Navigation Tabs -->
@@ -87,7 +87,7 @@
             </div>
           </div>
           <div>
-            <a href='{% url "update-task" task.id %}' class="px-2 py-1 bg-green-500 rounded">Edit</a>
+            <a href='{% url "update-task" task.id %}' class="px-2 py-1 bg-green-500">Edit</a>
           <form action='{% url "delete-task" task.id %}' method='POST'>
             {% csrf_token %}
             <button
@@ -116,7 +116,11 @@
         <div class="bg-white p-6 rounded-lg shadow-sm">
           <h2 class="text-xl font-bold mb-4">ASSETS</h2>
           <div class="space-y-4">
-            <img src={{task.details.asset.url}} alt="Task Manager App Screenshot 1" class="w-full rounded-lg"/>
+            <img
+              src={{task.details.asset.url}}
+              alt="Task Manager App Screenshot 1"
+              class="w-full rounded-lg"
+            />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm
-from tasks.models import Task, TaskDetail, Project
+from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm, EventForm
+from tasks.models import Task, TaskDetail, Project, Event
 from datetime import date
 from django.db.models import Q, Count, Max, Min, Avg
 from django.contrib import messages
@@ -14,8 +14,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.base import ContextMixin
-from django.views.generic import ListView, DetailView, UpdateView
-
+from django.views.generic import ListView, DetailView, UpdateView, TemplateView, View, FormView
 
 
 
@@ -89,11 +88,68 @@ def manager_dashboard(request):
     return render(request, "dashboard/manager_dashboard.html", context)
 
 
+# Naton Class base view
+class ManagerDashboardView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Task
+    template_name = "dashboard/manager_dashboard.html"
+    context_object_name = "tasks"
+    permission_required = "is_manager"
+    login_url = "no-permission"
+
+    def get_queryset(self):
+        type_filter = self.request.GET.get("type", "all")
+        base_query = Task.objects.select_related("details").prefetch_related("assigned_to")
+
+        if type_filter == "completed":
+            return base_query.filter(status="COMPLETED")
+        elif type_filter == "in-progress":
+            return base_query.filter(status="IN_PROGRESS")
+        elif type_filter == "pending":
+            return base_query.filter(status="PENDING")
+        return base_query.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        counts = Task.objects.aggregate(
+            total=Count("id"),
+            completed=Count("id", filter=Q(status="COMPLETED")),
+            in_progress=Count("id", filter=Q(status="IN_PROGRESS")),
+            pending=Count("id", filter=Q(status="PENDING")),
+        )
+        context["counts"] = counts
+        context["role"] = "manager"
+        return context
+
+
+
 @login_required
 @permission_required("is_manager", login_url='no-permission')
 # @user_passes_test(is_employee)
 def employee_dashboard(request):
     return render(request, "dashboard/user_dashboard.html")
+
+# Naton Class base view
+class EmployeeDashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    template_name = "dashboard/user_dashboard.html"
+    permission_required = "is_manager"
+    login_url = "no-permission"
+
+
+
+@login_required
+@permission_required("is_event_management", login_url='no-permission')
+def event_management(request):
+    return render(request, "index.html")
+
+@login_required
+@permission_required("is_event_form", login_url='no-permission')
+def event_form(request):
+    return render(request, "event_form.html")
+
+@login_required
+@permission_required("is_event", login_url='no-permission')
+def event(request):
+    return render(request, "event.html")
 
 
 @login_required
@@ -290,6 +346,24 @@ def delete_task(request, id):
     else:
         messages.error(request, 'Something went wrong')
         return redirect('manager-dashboard')
+    
+
+# Naton Class base view
+class DeleteTaskView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = "tasks.delete_task"
+    login_url = "no-permission"
+
+    def post(self, request, id):
+        task = get_object_or_404(Task, id=id)
+        task.delete()
+        messages.success(request, "Task Deleted Successfully")
+        return redirect("manager-dashboard")
+
+    def get(self, request, id):
+        messages.error(request, "Something went wrong")
+        return redirect("manager-dashboard")
+
+
 
 
 @login_required
@@ -363,3 +437,33 @@ def dashboard(request):
         return redirect('admin-dashboard')
 
     return redirect('no-permission')
+
+
+
+# /////////////////////////////////////////
+
+
+def event_management(request):
+    events = Event.objects.all()
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = EventForm()
+
+    return render(request, "index.html", {"form": form, "events": events})
+
+
+# Naton Class base view
+class EventManagementView(FormView, ListView):
+    template_name = "index.html"
+    form_class = EventForm
+    model = Event
+    context_object_name = "events"
+    success_url = "index"
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)

@@ -60,3 +60,14 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# /////////////////////////////////////////////
+
+class Event(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Event Name")
+    date = models.DateField(verbose_name="Event Date")
+    description = models.TextField(verbose_name="Event Description", blank=True)
+
+    def __str__(self):
+        return self.name

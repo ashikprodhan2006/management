@@ -1,71 +1,113 @@
 {% extends "base.html" %}
 {% block content %}
-  <!-- Hero Section -->
-  <section class="bg-blue-600 text-white py-32 md:py-40">
-    <div class="container mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6">
-        Streamline Your Workflow with TaskMaster
-      </h1>
-      <p class="text-xl mb-12">
-        Empower your team with our intuitive task management solution
-      </p>
-      <a
-        href="#"
-        class="bg-white text-blue-600 px-8 py-4 rounded-md font-semibold text-lg hover:bg-gray-100 transition duration-300"
-        >Get Started</a
-      >
+  <div class="mt-[70px]">
+  <section class="text-white">
+    <div class="relative">
+      <img src="static/image/banner-card2.jpg" alt="Image" class="w-full h-full object-cover">
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-60 text-white px-6 py-16 text-lg text-center rounded-sm">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Discover & Manage Events with Ease</h1>
+        <p class="text-xl mb-12">Join or organize events effortlessly with our powerful event management system.</p>
+        <a href="#" class="bg-white text-blue-600 px-8 py-4 rounded-md font-semibold text-lg hover:bg-red-800 hover:text-white transition duration-300">Get Started</a>
+      </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="py-24 md:py-32">
+
+  <section class="py-15 md:py-32 bg-gray-50">
     <div class="container mx-auto px-6">
-      <h2 class="text-3xl font-bold text-center mb-16">
-        Tailored for Every Role
-      </h2>
+      <h2 class="text-3xl font-bold text-center mb-16">Designed for Every Role</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-        <!-- Admin Card -->
         <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/icon1.jpg" class="w-full h-40 object-cover rounded mb-4">
           <h3 class="text-2xl font-semibold mb-6">Admin</h3>
-          <ul class="list-disc list-inside text-gray-600 space-y-3">
-            <li>Manage user roles and permissions</li>
-            <li>Generate comprehensive reports</li>
-            <li>Configure system-wide settings</li>
-            <li>Monitor team performance</li>
-          </ul>
+            <p>Manage users, events, and reports with full control.</p>
+            <p>Generate comprehensive reports</p>
         </div>
         <!-- Manager Card -->
         <div class="bg-white rounded-lg shadow-md p-8">
-          <h3 class="text-2xl font-semibold mb-6">Manager</h3>
-          <ul class="list-disc list-inside text-gray-600 space-y-3">
-            <li>Create and assign tasks to employees</li>
-            <li>Track project progress in real-time</li>
-            <li>Set deadlines and priorities</li>
-            <li>Generate team performance reports</li>
-          </ul>
+          <img src="static/image/icon8.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Organizer</h3>
+            <p>Create and manage events, track attendees, and send updates.</p>
+            <p>Track project progress in real-time</p>
         </div>
         <!-- Employee Card -->
         <div class="bg-white rounded-lg shadow-md p-8">
-          <h3 class="text-2xl font-semibold mb-6">Employee</h3>
-          <ul class="list-disc list-inside text-gray-600 space-y-3">
-            <li>View and manage assigned tasks</li>
-            <li>Collaborate with team members</li>
-            <li>Update task status and progress</li>
-            <li>Track personal productivity</li>
+          <img src="static/image/icon3.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Participant</h3>
+            <p>Find exciting events, register, and enjoy the experience.</p>
+            <p>Collaborate with team members</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="py-15 md:py-32">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16">Upcoming Events</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/banner-card3.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Tech Conference 2025</h3>
+          <p>March 3, 2025 - San Francisco</p>
+          <p>Generate comprehensive reports</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/card1.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Music Fest 2025</h3>
+            <p>April 25, 2025 - New York</p>
+            <p>Track project progress in real-time</p>
+        </div>
+        <!-- Employee Card -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/card6.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Business Summit</h3>
+            <p>May 16, 2025 - London</p>
+            <p>Collaborate with team members</p>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Call to Action -->
+
+  <section class="bg-gray-50 py-15 md:py-32">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16">What Our Users Say</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/icon2.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Admin</h3>
+            <p>Manage users, events, and reports with full control.</p>
+            <p>Generate comprehensive reports</p>
+        </div>
+        <!-- Manager Card -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/icon5.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Organizer</h3>
+            <p>Create and manage events, track attendees, and send updates.</p>
+            <p>Track project progress in real-time</p>
+        </div>
+        <!-- Employee Card -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <img src="static/image/icon4.jpg" class="w-full h-40 object-cover rounded mb-4">
+          <h3 class="text-2xl font-semibold mb-6">Participant</h3>
+            <p>Find exciting events, register, and enjoy the experience.</p>
+            <p>Collaborate with team members</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
   <section class="bg-gray-200 py-24 md:py-32">
     <div class="container mx-auto px-6 text-center">
       <h2 class="text-3xl font-bold mb-6">
         Ready to Boost Your Team's Productivity?
       </h2>
       <p class="text-xl mb-12">
-        Join thousands of organizations already using TaskMaster
+        Join thousands of organizations already using EventManager
       </p>
       <a
         href="#"
@@ -74,4 +116,5 @@
       >
     </div>
   </section>
+  </div>
 {% endblock %}

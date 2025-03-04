@@ -1,0 +1,66 @@
+{% extends "event.html" %}
+<title>{% block title %} Event Forms {% endblock title %}</title>
+{% block content %}
+    <div class="w-96 h-full bg-red-700 p-4">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Create an Event</h2>
+        <form method="POST" class="bg-white p-6 rounded-lg shadow-md space-y-4">
+            <input type="hidden" name="csrfmiddlewaretoken" value="MbSOzrfFHfXKBBbMjKcmWMNilEHI3qQtQofvlgrPZ6hzeHUCLxjpwOnfT7ZmSb32">
+            <!-- Event Name -->
+            <div class="w-1/2 mx-auto mb-8">
+                <div>
+                    <label for="event_name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="event_name" maxlength="260" class="w-full p-3 border-2 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Enter event name" required id = "id_name"/>
+                </div>
+
+                <!-- Event Description -->
+                <div class="mt-8">
+                    <label for="event_description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="event_description" name="event_description" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Describe your event" required></textarea>
+                </div>
+
+                <!-- Event Date -->
+                <div class="mt-8">
+                    <label for="id_description" class="block text-sm font-medium text-gray-700">Date</label>
+                    <input type="date" id="event_date" name="event_date" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required/>
+                </div class="mt-8">
+
+                <!-- Event Time -->
+                <div class="mt-8">
+                    <label for="event_time" class="block text-sm font-medium text-gray-700">Time</label>
+                    <input type="time" id="event_time" name="event_time" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required/>
+                </div>
+
+                <!-- Event Location -->
+                <div class="mt-8">
+                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                    <input type="text" id="location" name="location" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Enter event location" required/>
+                </div>
+            
+                <!-- Event Category -->
+                <div class="mt-8">
+                    <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                    <select id="category" name="category" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="business">Business</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="education">Education</option>
+                        <option value="sports">Sports</option>
+                        <option value="technology">Technology</option>
+                    </select>
+                </div>
+            
+                <!-- Number of Participants -->
+                <div class="mt-8">
+                    <label for="participants" class="block text-sm font-medium text-gray-700">Participants</label>
+                    <input type="number" id="participants" name="participants" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Enter number of participants" min="1" required/>
+                </div>
+            
+                <!-- Submit Button -->
+                <div class="mt-8">
+                    <button
+                    type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Create Event</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

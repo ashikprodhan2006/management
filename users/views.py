@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 # from django.contrib.auth.models import User, Group
 from django.contrib.auth.models import Group
 from django.contrib.auth import login, logout
@@ -10,10 +10,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Prefetch
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import View, TemplateView, UpdateView, ListView, FormView
 from django.urls import reverse_lazy
 # from users.models import UserProfile
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 # Create your views here.
@@ -87,6 +88,24 @@ def sign_up(request):
             print("Form is not valid")
     return render(request, 'registration/register.html', {"form": form})
 
+# Notun Class base view
+class SignUpView(FormView):
+    template_name = "registration/register.html"
+    form_class = CustomRegistrationForm
+    success_url = "sign-in"
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.set_password(form.cleaned_data.get("password"))
+        user.is_active = False
+        user.save()
+        messages.success(
+            self.request, "A Confirmation mail sent. Please check your email"
+        )
+        return super().form_valid(form)
+
+
+
 
 def sign_in(request):
     form = LoginForm()
@@ -112,6 +131,7 @@ def sign_out(request):
     if request.method == 'POST':
         logout(request)
         return redirect('sign-in')
+
     
 
 class ChangePassword(PasswordChangeView):
@@ -149,6 +169,26 @@ def admin_dashboard(request):
     return render(request, 'admin/dashboard.html', {"users": users})
 
 
+# Notun Class base view
+class AdminDashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    template_name = "admin/dashboard.html"
+    permission_required = "is_admin"
+    login_url = "no-permission"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        users = User.objects.prefetch_related(
+            Prefetch("groups", queryset=Group.objects.all(), to_attr="all_groups")
+        ).all()
+
+        for user in users:
+            user.group_name = user.all_groups[0].name if user.all_groups else "No Group Assigned"
+        
+        context["users"] = users
+        return context
+    
+
+
 @user_passes_test(is_admin, login_url='no-permission')
 def assign_role(request, user_id):
     user = User.objects.get(id=user_id)
@@ -166,6 +206,28 @@ def assign_role(request, user_id):
 
     return render(request, 'admin/assign_role.html', {"form": form})
 
+# Notun Class base view
+class AssignRoleView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
+    template_name = "admin/assign_role.html"
+    form_class = AssignRoleForm
+    permission_required = "is_admin"
+    login_url = "no-permission"
+    success_url = "admin-dashboard"
+
+    def form_valid(self, form):
+        user_id = self.kwargs.get("user_id")
+        user = get_object_or_404(User, id=user_id)
+        role = form.cleaned_data.get("role")
+        user.groups.clear()
+        user.groups.add(role)
+        messages.success(self.request, f"User {user.username} has been assigned to the {role.name} role")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class()
+        return context
+
 
 @user_passes_test(is_admin, login_url='no-permission')
 def create_group(request):
@@ -182,10 +244,42 @@ def create_group(request):
     return render(request, 'admin/create_group.html', {'form': form})
 
 
+# Notun Class base view
+class CreateGroupView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
+    template_name = "admin/create_group.html"
+    form_class = CreateGroupForm
+    permission_required = "is_admin"
+    login_url = "no-permission"
+    success_url = "create-group"
+
+    def form_valid(self, form):
+        group = form.save()
+        messages.success(self.request, f"Group {group.name} has been created successfully")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class()
+        return context
+
+
+
 @user_passes_test(is_admin, login_url='no-permission')
 def group_list(request):
     groups = Group.objects.prefetch_related('permissions').all()
     return render(request, 'admin/group_list.html', {'groups': groups})
+
+
+# Notun Class base view
+class GroupListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    template_name = "admin/group_list.html"
+    model = Group
+    context_object_name = "groups"
+    permission_required = "is_admin"
+    login_url = "no-permission"
+
+    def get_queryset(self):
+        return Group.objects.prefetch_related("permissions").all()
 
 
 class ProfileView(TemplateView):
