@@ -40,12 +40,6 @@ def is_employee(user):
     return user.groups.filter(name='Employee').exists()
 
 @login_required
-@permission_required("is_dashboards", login_url='no-permission')
-def dashboards(request):
-    return render(request, "dashboard/dashboard.html");
-
-
-@login_required
 @permission_required("is_manager", login_url='no-permission')
 # @user_passes_test(is_manager, login_url='no-permission')
 def manager_dashboard(request):
