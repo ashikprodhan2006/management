@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from tasks.forms import TaskForm, TaskModelForm, TaskDetailModelForm
 from tasks.models import Task, TaskDetail, Project
@@ -87,6 +87,42 @@ def manager_dashboard(request):
         "role": 'manager'
     }
     return render(request, "dashboard/manager_dashboard.html", context)
+
+
+
+# Naton Class base view
+class ManagerDashboardView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Task
+    template_name = "dashboard/manager_dashboard.html"
+    context_object_name = "tasks"
+    permission_required = "is_manager"
+    login_url = "no-permission"
+
+    def get_queryset(self):
+        type_filter = self.request.GET.get("type", "all")
+        base_query = Task.objects.select_related("details").prefetch_related("assigned_to")
+
+        if type_filter == "completed":
+            return base_query.filter(status="COMPLETED")
+        elif type_filter == "in-progress":
+            return base_query.filter(status="IN_PROGRESS")
+        elif type_filter == "pending":
+            return base_query.filter(status="PENDING")
+        return base_query.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        counts = Task.objects.aggregate(
+            total=Count("id"),
+            completed=Count("id", filter=Q(status="COMPLETED")),
+            in_progress=Count("id", filter=Q(status="IN_PROGRESS")),
+            pending=Count("id", filter=Q(status="PENDING")),
+        )
+        context["counts"] = counts
+        context["role"] = "manager"
+        return context
+
+
 
 
 @login_required
@@ -290,6 +326,23 @@ def delete_task(request, id):
     else:
         messages.error(request, 'Something went wrong')
         return redirect('manager-dashboard')
+    
+
+# Natun Class base view
+class DeleteTaskView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = "tasks.delete_task"
+    login_url = "no-permission"
+
+    def post(self, request, id):
+        task = get_object_or_404(Task, id=id)
+        task.delete()
+        messages.success(request, "Task Deleted Successfully")
+        return redirect("manager-dashboard")
+
+    def get(self, request, id):
+        messages.error(request, "Something went wrong")
+        return redirect("manager-dashboard")
+
 
 
 @login_required

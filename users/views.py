@@ -10,10 +10,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Prefetch
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, FormView
 from django.urls import reverse_lazy
 # from users.models import UserProfile
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 # Create your views here.
@@ -149,6 +150,26 @@ def admin_dashboard(request):
     return render(request, 'admin/dashboard.html', {"users": users})
 
 
+# Notun Class base view
+class AdminDashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    template_name = "admin/dashboard.html"
+    permission_required = "is_admin"
+    login_url = "no-permission"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        users = User.objects.prefetch_related(
+            Prefetch("groups", queryset=Group.objects.all(), to_attr="all_groups")
+        ).all()
+
+        for user in users:
+            user.group_name = user.all_groups[0].name if user.all_groups else "No Group Assigned"
+        
+        context["users"] = users
+        return context
+    
+
+
 @user_passes_test(is_admin, login_url='no-permission')
 def assign_role(request, user_id):
     user = User.objects.get(id=user_id)
@@ -160,11 +181,32 @@ def assign_role(request, user_id):
             role = form.cleaned_data.get('role')
             user.groups.clear()  # Remove old roles
             user.groups.add(role)
-            messages.success(request, f"User {
-                             user.username} has been assigned to the {role.name} role")
+            messages.success(request, f"User {user.username} has been assigned to the {role.name} role")
             return redirect('admin-dashboard')
 
     return render(request, 'admin/assign_role.html', {"form": form})
+
+# Notun Class base view
+class AssignRoleView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
+    template_name = "admin/assign_role.html"
+    form_class = AssignRoleForm
+    permission_required = "is_admin"
+    login_url = "no-permission"
+    success_url = "admin-dashboard"
+
+    def form_valid(self, form):
+        user_id = self.kwargs.get("user_id")
+        user = get_object_or_404(User, id=user_id)
+        role = form.cleaned_data.get("role")
+        user.groups.clear()
+        user.groups.add(role)
+        messages.success(self.request, f"User {user.username} has been assigned to the {role.name} role")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class()
+        return context
 
 
 @user_passes_test(is_admin, login_url='no-permission')
@@ -175,11 +217,29 @@ def create_group(request):
 
         if form.is_valid():
             group = form.save()
-            messages.success(request, f"Group {
-                             group.name} has been created successfully")
+            messages.success(request, f"Group {group.name} has been created successfully")
             return redirect('create-group')
 
     return render(request, 'admin/create_group.html', {'form': form})
+
+
+# Notun Class base view
+class CreateGroupView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
+    template_name = "admin/create_group.html"
+    form_class = CreateGroupForm
+    permission_required = "is_admin"
+    login_url = "no-permission"
+    success_url = "create-group"
+
+    def form_valid(self, form):
+        group = form.save()
+        messages.success(self.request, f"Group {group.name} has been created successfully")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class()
+        return context
 
 
 @user_passes_test(is_admin, login_url='no-permission')
